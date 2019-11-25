@@ -1,10 +1,10 @@
 #!/bin/sh
 # Setting up env variable, user and project path
 MAGMA_ROOT="/home/magma"
-MAGMA_USER="timodzik"
+MAGMA_USER="magma"
 AGW_INSTALL_CONFIG="/etc/systemd/system/multi-user.target.wants/agw_installation.service"
 # Testing if the right Kernel Version is installed and $MAGMA_USER is sudoers
-if `uname -r` -ne "4.9.0-9-amd64" && ! grep -q "$MAGMA_USER ALL=(ALL) NOPASSWD:ALL" /etc/sudoers; then
+if [ `uname -r` != "4.9.0-9-amd64" ] && ! grep -q "$MAGMA_USER ALL=(ALL) NOPASSWD:ALL" /etc/sudoers; then
   PING_SUCCESS="ok"
   PING_RESULT=`ping -c 1 -I enp1s0 8.8.8.8 &> /dev/null && echo "$PING_SUCCESS"`
   if [[ "$PING_RESULT" != "$PING_SUCCESS" ]]; then
