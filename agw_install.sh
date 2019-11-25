@@ -49,6 +49,7 @@ if [ `uname -r` != "4.9.0-9-amd64" ] && ! grep -q "$MAGMA_USER ALL=(ALL) NOPASSW
   # echo the the service config
   echo "[Unit]
 Description=AGW Installation
+After=network-online.target
 
 [Service]
 Type=oneshot
