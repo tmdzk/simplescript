@@ -6,6 +6,7 @@ AGW_INSTALL_CONFIG="/etc/systemd/system/multi-user.target.wants/agw_installation
 # Testing if the right Kernel Version is installed and $MAGMA_USER is sudoers
 if [ `uname -r` != "4.9.0-9-amd64" ] && ! grep -q "$MAGMA_USER ALL=(ALL) NOPASSWD:ALL" /etc/sudoers; then
   PING_SUCCESS="ok"
+  # Testing that enp1s0 (eth0) is connected to the internet
   PING_RESULT=`ping -c 1 -I enp1s0 8.8.8.8 &> /dev/null && echo "$PING_SUCCESS"`
   if [[ "$PING_RESULT" != "$PING_SUCCESS" ]]; then
     echo "enp1s0 (eth0) is not connected to internet, please double check your plugged wires."
