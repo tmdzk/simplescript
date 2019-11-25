@@ -61,6 +61,7 @@ Group=root
 WantedBy=multi-user.target" > $AGW_INSTALL_CONFIG
   reboot
 else
+  echo "Right Kernel version is installed and magma is sudoers pursuing installation"
   apt-get update
   apt-get -y install curl make virtualenv zip rsync git software-properties-common python3-pip python-dev
   alias python=python3
@@ -72,15 +73,17 @@ else
   DEPLOY_PATH="/home/$MAGMA_USER/magma/lte/gateway/deploy"
   # Generating a localhost hostfile.
   echo "[ovs_build]
-  127.0.0.1 ansible_connection=local
-  [ovs_deploy]
-  127.0.0.1 ansible_connection=local" > $DEPLOY_PATH/agw_hosts
+127.0.0.1 ansible_connection=local
+[ovs_deploy]
+127.0.0.1 ansible_connection=local" > $DEPLOY_PATH/agw_hosts
   # Triggering ovs_build in order to build custom patches.
   su - $MAGMA_USER -c "ansible-playbook -e \"MAGMA_ROOT='/home/$MAGMA_USER/magma' OUTPUT_DIR='/tmp'\" -i $DEPLOY_PATH/agw_hosts $DEPLOY_PATH/ovs_build.yml"
   # Triggering ovs_deploy in order deploy magma.
   su - $MAGMA_USER -c "ansible-playbook -e \"PACKAGE_LOCATION='/tmp'\" -i $DEPLOY_PATH/agw_hosts $DEPLOY_PATH/ovs_deploy.yml"
   # deleting boot script
-  rm -rf $AGW_INSTALL_CONFIG
+  if [ -f "$AGW_INSTALL_CONFIG" ]; then
+    rm -rf $AGW_INSTALL_CONFIG
+  fi
   # removing ansible from the freshly installed agw
   pip3 uninstall --yes ansible
   # Final messages magma status and end message
