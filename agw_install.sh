@@ -61,6 +61,11 @@ Group=root
 WantedBy=multi-user.target" > $AGW_INSTALL_CONFIG
   reboot
 else
+  echo "Making sure network is ready"
+  while  [[ `ping -c 1 -I eth0 facebook.com &> /dev/null && echo "$PING_SUCCESS"`  != "$PING_SUCCESS" ]]; do
+    echo "Network not ready yet"
+    sleep 1
+  done
   echo "Right Kernel version is installed and magma is sudoers pursuing installation"
   apt-get update
   apt-get -y install curl make virtualenv zip rsync git software-properties-common python3-pip python-dev
