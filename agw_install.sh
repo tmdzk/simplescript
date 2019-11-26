@@ -67,7 +67,7 @@ Group=root
 WantedBy=multi-user.target" > $AGW_INSTALL_CONFIG
   reboot
 else
-  while [[ $(ping -c 1 -I eth0 google.com &> /dev/null && echo "$PING_SUCCESS") != "$PING_SUCCESS" ]]; do
+  while ! ping -c 1 -W 1 -I eth0 google.com; do
     echo "Network not ready yet"
     sleep 1
   done
