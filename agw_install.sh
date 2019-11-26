@@ -3,7 +3,12 @@
 MAGMA_ROOT="/home/magma"
 MAGMA_USER="magma"
 AGW_INSTALL_CONFIG="/etc/systemd/system/multi-user.target.wants/agw_installation.service"
+AGW_SCRIPT_PATH="/root"
 # Testing if the right Kernel Version is installed and $MAGMA_USER is sudoers
+if [ ! -f "$AGW_SCRIPT_PATH/agw_install.sh" ]; then
+  wget --no-cache -O $AGW_SCRIPT_PATH/agw_install.sh https://raw.githubusercontent.com/facebookincubator/magma/master/lte/gateway/deploy/agw_installation.sh
+fi
+
 if [ `uname -r` != "4.9.0-9-amd64" ] || ! grep -q "$MAGMA_USER ALL=(ALL) NOPASSWD:ALL" /etc/sudoers; then
   PING_SUCCESS="ok"
   # Testing that enp1s0 (eth0) is connected to the internet
